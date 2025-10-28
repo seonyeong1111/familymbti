@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>패밀리루프 - 가족 MBTI 테스트</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          sans-serif;
+        overflow-x: hidden;
+      }
+
+      .container {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        position: relative;
+      }
+
+      .bg-intro {
+        background: linear-gradient(
+          135deg,
+          #a78bfa 0%,
+          #ec4899 50%,
+          #fb7185 100%
+        );
+      }
+
+      .bg-test {
+        background: linear-gradient(
+          135deg,
+          #60a5fa 0%,
+          #a78bfa 50%,
+          #ec4899 100%
+        );
+      }
+
+      .bg-result {
+        background: linear-gradient(
+          135deg,
+          #fbbf24 0%,
+          #fb923c 50%,
+          #ec4899 100%
+        );
+      }
+
+      .card {
+        background: white;
+        border-radius: 24px;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        padding: 48px;
+        max-width: 600px;
+        width: 100%;
+        animation: fadeIn 0.5s ease-out;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      @keyframes bounce {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-10px);
+        }
+      }
+
+      @keyframes pulse {
+        0%,
+        100% {
+          opacity: 1;
+        }
+        50% {
+          opacity: 0.7;
+        }
+      }
+
+      .bounce {
+        animation: bounce 2s infinite;
+      }
+
+      .pulse {
+        animation: pulse 2s infinite;
+      }
+
+      .title-gradient {
+        font-size: 48px;
+        font-weight: 800;
+        background: linear-gradient(to right, #7c3aed, #ec4899);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        margin: 20px 0;
+      }
+
+      .subtitle {
+        font-size: 28px;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 20px 0;
+      }
+
+      .emoji-large {
+        font-size: 80px;
+        margin: 20px 0;
+      }
+
+      .emoji-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 15px;
+        font-size: 40px;
+        margin: 20px 0;
+      }
+
+      .btn-primary {
+        width: 100%;
+        background: linear-gradient(to right, #a855f7, #ec4899);
+        color: white;
+        border: none;
+        padding: 18px 32px;
+        border-radius: 50px;
+        font-size: 20px;
+        font-weight: 700;
+        cursor: pointer;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        margin: 20px 0;
+      }
+
+      .btn-primary:hover {
+        transform: scale(1.05);
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.3);
+      }
+
+      .info-box {
+        background: linear-gradient(to right, #dbeafe, #e9d5ff);
+        border-radius: 16px;
+        padding: 24px;
+        margin: 20px 0;
+      }
+
+      .info-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 12px 0;
+        color: #374151;
+        font-weight: 500;
+      }
+
+      .progress-bar-container {
+        width: 100%;
+        background: #e5e7eb;
+        height: 12px;
+        border-radius: 50px;
+        overflow: hidden;
+        margin: 10px 0;
+      }
+
+      .progress-bar {
+        height: 100%;
+        background: linear-gradient(to right, #a855f7, #ec4899);
+        border-radius: 50px;
+        transition: width 0.5s ease;
+      }
+
+      .progress-text {
+        display: flex;
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .question {
+        font-size: 26px;
+        font-weight: 700;
+        color: #1f2937;
+        text-align: center;
+        margin: 30px 0;
+      }
+
+      .option-btn {
+        width: 100%;
+        background: linear-gradient(to right, #faf5ff, #fce7f3);
+        border: 3px solid #e9d5ff;
+        padding: 24px;
+        border-radius: 16px;
+        font-size: 18px;
+        font-weight: 600;
+        color: #1f2937;
+        cursor: pointer;
+        text-align: left;
+        margin: 12px 0;
+        transition: all 0.3s;
+      }
+
+      .option-btn:hover {
+        background: linear-gradient(to right, #f3e8ff, #fbcfe8);
+        border-color: #a855f7;
+        transform: scale(1.03);
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      }
+
+      .result-badge {
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 50px;
+        color: white;
+        font-weight: 700;
+        font-size: 24px;
+        margin: 20px 0;
+      }
+
+      .result-title {
+        font-size: 32px;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 20px 0;
+      }
+
+      .result-desc {
+        font-size: 18px;
+        color: #4b5563;
+        line-height: 1.6;
+        margin: 20px 0;
+      }
+
+      .result-detail {
+        background: linear-gradient(to right, #dbeafe, #e9d5ff);
+        border-radius: 16px;
+        padding: 24px;
+        margin: 20px 0;
+        text-align: left;
+      }
+
+      .result-section {
+        margin: 16px 0;
+      }
+
+      .result-section-title {
+        font-weight: 700;
+        margin-bottom: 8px;
+        font-size: 16px;
+      }
+
+      .promo-box {
+        background: linear-gradient(to right, #e9d5ff, #fbcfe8);
+        border-radius: 16px;
+        padding: 24px;
+        margin: 20px 0;
+      }
+
+      .tag-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .tag {
+        background: white;
+        padding: 6px 12px;
+        border-radius: 50px;
+        font-size: 14px;
+      }
+
+      .back-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        color: #6b7280;
+        background: none;
+        border: none;
+        cursor: pointer;
+        font-size: 14px;
+        margin-top: 20px;
+        padding: 8px;
+        transition: color 0.3s;
+      }
+
+      .back-btn:hover {
+        color: #374151;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .fade-out {
+        animation: fadeOut 0.3s ease-out forwards;
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+      }
+
+      @media (max-width: 640px) {
+        .card {
+          padding: 32px 24px;
+        }
+
+        .title-gradient {
+          font-size: 36px;
+        }
+
+        .subtitle {
+          font-size: 22px;
+        }
+
+        .question {
+          font-size: 22px;
+        }
+
+        .emoji-large {
+          font-size: 60px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Intro Screen -->
+    <div id="intro" class="container bg-intro">
+      <div class="card">
+        <div style="text-align: center">
+          <div class="bounce" style="font-size: 64px">✨</div>
+
+          <h1 class="title-gradient">패밀리루프</h1>
+
+          <p class="subtitle">우리 가족 MBTI는?</p>
+
+          <div class="emoji-container">
+            <span class="pulse">👨‍👩‍👧‍👦</span>
+            <span style="color: #ef4444; font-size: 40px" class="pulse"
+              >❤️</span
+            >
+            <span class="pulse">✨</span>
+          </div>
+
+          <p style="color: #4b5563; font-size: 18px; margin: 20px 0">
+            8개의 질문으로 알아보는<br />
+            나의 가족 캐릭터 유형!
+          </p>
+
+          <div class="info-box">
+            <div class="info-item">
+              <span style="font-size: 24px">👥</span>
+              <p>가족 미션으로 함께 성장해요</p>
+            </div>
+            <div class="info-item">
+              <span style="font-size: 24px">🏆</span>
+              <p>리워드로 사랑을 나눠요</p>
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="startTest()">
+            시작하기
+            <span>→</span>
+          </button>
+
+          <p style="font-size: 14px; color: #6b7280; margin-top: 20px">
+            ✨ 가족미션 리워드 앱 패밀리루프에서 만나요!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Test Screen -->
+    <div id="test" class="container bg-test hidden">
+      <div class="card">
+        <div class="progress-text">
+          <span style="color: #7c3aed"
+            >질문 <span id="currentQ">1</span> / 8</span
+          >
+          <span style="color: #ec4899"><span id="progress">13</span>%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="progressBar" style="width: 13%"></div>
+        </div>
+
+        <div style="text-align: center; margin: 30px 0">
+          <h2 class="question" id="questionText"></h2>
+          <p style="color: #6b7280">솔직하게 답해주세요! 🎯</p>
+        </div>
+
+        <div id="options"></div>
+
+        <button class="back-btn hidden" id="backBtn" onclick="prevQuestion()">
+          <span>←</span>
+          이전 질문
+        </button>
+      </div>
+    </div>
+
+    <!-- Result Screen -->
+    <div id="result" class="container bg-result hidden">
+      <div class="card">
+        <div style="text-align: center">
+          <div class="emoji-large bounce" id="resultEmoji"></div>
+
+          <div class="result-badge" id="resultBadge"></div>
+
+          <h2 class="result-title" id="resultTitle"></h2>
+
+          <p class="result-desc" id="resultDesc"></p>
+
+          <div class="result-detail">
+            <div class="result-section">
+              <p class="result-section-title" style="color: #7c3aed">
+                💪 당신의 강점
+              </p>
+              <p style="color: #374151" id="resultStrength"></p>
+            </div>
+            <div class="result-section">
+              <p class="result-section-title" style="color: #ec4899">
+                💡 패밀리루프 TIP
+              </p>
+              <p style="color: #374151" id="resultTip"></p>
+            </div>
+          </div>
+
+          <div class="promo-box">
+            <p style="font-weight: 700; color: #1f2937; margin-bottom: 12px">
+              🎉 패밀리루프에서 우리 가족만의 미션을 만들어보세요!
+            </p>
+            <div class="tag-container">
+              <span class="tag">가족 미션</span>
+              <span class="tag">리워드 시스템</span>
+              <span class="tag">성장 기록</span>
+              <span class="tag">함께하는 즐거움</span>
+            </div>
+          </div>
+
+          <button class="btn-primary" onclick="restart()">
+            <a
+              href="https://drive.google.com/file/d/1D4G5TBJ9ATEygdQY8_Pu8xFkHZxcRy_p/view"
+              target="_blank"
+              rel="noopener noreferrer"
+              style="
+                display: inline-block;
+                color: white;
+                padding: 12px 20px;
+                border-radius: 8px;
+                text-decoration: none;
+                font-weight: bold;
+                font-size: 24px;
+              "
+            >
+              🚀 패밀리루프 지금 바로 다운받기 📱
+            </a>
+          </button>
+
+          <p style="font-size: 14px; color: #6b7280; margin-top: 20px">
+            가족들과 함께 테스트하고 서로의 유형을 공유해보세요! 💕
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const mbtiProfiles = {
+        ISTJ: {
+          title: "🦉 집안의 현명한 부엉이",
+          desc: "책임감 강하고 믿음직한 우리집 대들보! 가족의 약속과 전통을 지키는 수호자",
+          emoji: "🦉",
+          color: "linear-gradient(to right, #60a5fa, #2563eb)",
+          strength: "계획적이고 체계적인 일 처리",
+          tip: "가끔은 spontaneous하게 즐거운 미션에 도전해보세요!",
+        },
+        ISFJ: {
+          title: "🐻 포근한 테디베어",
+          desc: "따뜻하고 헌신적인 가족의 천사! 모두를 챙기고 돌보는 사랑 가득 케어베어",
+          emoji: "🐻",
+          color: "linear-gradient(to right, #f472b6, #ec4899)",
+          strength: "세심한 배려와 희생정신",
+          tip: "본인을 위한 리워드도 꼭 챙기세요!",
+        },
+        INFJ: {
+          title: "🦄 신비로운 유니콘",
+          desc: "통찰력 넘치는 가족의 현자! 깊은 생각으로 모두에게 영감을 주는 마법사",
+          emoji: "🦄",
+          color: "linear-gradient(to right, #c084fc, #a855f7)",
+          strength: "깊이 있는 대화와 공감 능력",
+          tip: "가족과의 깊은 대화 미션을 만들어보세요!",
+        },
+        INTJ: {
+          title: "🧙 전략의 마법사",
+          desc: "똑똑하고 독립적인 가족의 전략가! 미래를 내다보는 체스 마스터",
+          emoji: "🧙",
+          color: "linear-gradient(to right, #818cf8, #6366f1)",
+          strength: "장기적 계획과 목표 설정",
+          tip: "가족 목표 달성 미션으로 리워드를 설계해보세요!",
+        },
+        ISTP: {
+          title: "🦝 호기심 많은 라쿤",
+          desc: "손재주 좋고 문제해결 천재! 뭐든 척척 고치는 우리집 만능 엔지니어",
+          emoji: "🦝",
+          color: "linear-gradient(to right, #9ca3af, #6b7280)",
+          strength: "실용적 문제 해결 능력",
+          tip: "집안일 미션에서 최고의 효율을 발휘할 거예요!",
+        },
+        ISFP: {
+          title: "🦋 자유로운 나비",
+          desc: "예술적이고 감성적인 우리집 예술가! 순수하고 아름다운 영혼의 소유자",
+          emoji: "🦋",
+          color: "linear-gradient(to right, #5eead4, #14b8a6)",
+          strength: "창의적이고 감성적인 표현",
+          tip: "가족 사진 찍기, 그림 그리기 미션을 즐겨보세요!",
+        },
+        INFP: {
+          title: "🐰 꿈꾸는 토끼",
+          desc: "이상적이고 순수한 가족의 몽상가! 세상을 더 아름답게 만드는 드리머",
+          emoji: "🐰",
+          color: "linear-gradient(to right, #34d399, #10b981)",
+          strength: "진정성 있는 마음과 이상 추구",
+          tip: "의미 있는 가족 미션으로 사랑을 전해보세요!",
+        },
+        INTP: {
+          title: "🦊 영리한 여우",
+          desc: "논리적이고 창의적인 천재 과학자! 끝없는 호기심으로 세상을 탐구하는 아이디어 뱅크",
+          emoji: "🦊",
+          color: "linear-gradient(to right, #fb923c, #f97316)",
+          strength: "분석적 사고와 창의성",
+          tip: "퀴즈나 두뇌 게임 미션에 강할 거예요!",
+        },
+        ESTP: {
+          title: "🐯 에너지 넘치는 호랑이",
+          desc: "행동파 모험가! 위험을 즐기고 스릴을 찾는 우리집 액션 히어로",
+          emoji: "🐯",
+          color: "linear-gradient(to right, #fbbf24, #f59e0b)",
+          strength: "즉각적인 행동력과 추진력",
+          tip: "액티브한 야외 미션에서 빛을 발할 거예요!",
+        },
+        ESFP: {
+          title: "🐹 귀여운 햄스터",
+          desc: "분위기 메이커 엔터테이너! 언제나 밝고 즐거운 에너지로 가득한 햇살",
+          emoji: "🐹",
+          color: "linear-gradient(to right, #fbbf24, #f59e0b)",
+          strength: "긍정 에너지와 분위기 조성",
+          tip: "가족 파티 미션의 주인공이 되어보세요!",
+        },
+        ENFP: {
+          title: "🐶 신나는 강아지",
+          desc: "열정적이고 창의적인 가족의 태양! 긍정 에너지로 모두를 행복하게 만드는 비타민",
+          emoji: "🐶",
+          color: "linear-gradient(to right, #fb7185, #f43f5e)",
+          strength: "열정과 창의적 아이디어",
+          tip: "새로운 가족 미션을 제안하는 리더가 되어보세요!",
+        },
+        ENTP: {
+          title: "🐵 장난꾸러기 원숭이",
+          desc: "아이디어 폭발하는 발명가! 논쟁을 즐기고 새로운 걸 창조하는 혁신가",
+          emoji: "🐵",
+          color: "linear-gradient(to right, #ef4444, #dc2626)",
+          strength: "혁신적 사고와 도전 정신",
+          tip: "독특한 미션 아이디어로 가족을 놀라게 해보세요!",
+        },
+        ESTJ: {
+          title: "🦁 카리스마 사자",
+          desc: "강력한 리더십의 CEO! 체계적이고 효율적으로 가족을 이끄는 대장",
+          emoji: "🦁",
+          color: "linear-gradient(to right, #f97316, #dc2626)",
+          strength: "조직력과 실행력",
+          tip: "가족 미션 관리자로 최고의 역할을 해낼 거예요!",
+        },
+        ESFJ: {
+          title: "🐱 다정한 고양이",
+          desc: "사교적이고 배려심 많은 가족의 인기왕! 모두를 하나로 묶는 따뜻한 접착제",
+          emoji: "🐱",
+          color: "linear-gradient(to right, #ec4899, #f43f5e)",
+          strength: "따뜻한 분위기 형성",
+          tip: "모두가 참여하는 미션으로 가족을 하나로 만들어보세요!",
+        },
+        ENFJ: {
+          title: "🦚 화려한 공작",
+          desc: "카리스마 넘치는 연설가! 타고난 리더십으로 모두를 이끄는 멘토",
+          emoji: "🦚",
+          color: "linear-gradient(to right, #a855f7, #ec4899)",
+          strength: "공감과 동기부여 능력",
+          tip: "가족들에게 영감을 주는 미션을 만들어보세요!",
+        },
+        ENTJ: {
+          title: "🦅 당당한 독수리",
+          desc: "타고난 지휘관! 강력한 추진력으로 목표를 달성하는 우리집 사령관",
+          emoji: "🦅",
+          color: "linear-gradient(to right, #3b82f6, #6366f1)",
+          strength: "목표 지향적 리더십",
+          tip: "장기 가족 프로젝트의 리더가 되어보세요!",
+        },
+      };
+
+      const questions = [
+        {
+          q: "주말 가족 나들이 계획은?",
+          options: [
+            { text: "미리미리 상세하게 계획 🗓️", type: "J" },
+            { text: "그날 기분대로 즉흥적으로 ✨", type: "P" },
+          ],
+        },
+        {
+          q: "가족 모임에서 나는?",
+          options: [
+            { text: "조용히 듣고 필요할 때만 말해요 🤫", type: "I" },
+            { text: "활발하게 대화를 주도해요 🗣️", type: "E" },
+          ],
+        },
+        {
+          q: "가족이 고민 상담할 때?",
+          options: [
+            { text: "구체적인 해결책을 제시해요 💡", type: "T" },
+            { text: "공감하고 위로해줘요 🤗", type: "F" },
+          ],
+        },
+        {
+          q: "가족 미션을 받으면?",
+          options: [
+            { text: "바로 실행! 일단 해보는 게 중요 🏃", type: "S" },
+            { text: "왜 하는지, 의미를 먼저 생각 💭", type: "N" },
+          ],
+        },
+        {
+          q: "명절 준비할 때 나는?",
+          options: [
+            { text: "계획표 만들고 체크리스트 작성 📋", type: "J" },
+            { text: "그때그때 필요한 걸 해요 🎯", type: "P" },
+          ],
+        },
+        {
+          q: "가족 파티를 준비한다면?",
+          options: [
+            { text: "혼자 조용히 준비하는 게 편해요 🎨", type: "I" },
+            { text: "가족들과 왁자지껄 준비해요 🎉", type: "E" },
+          ],
+        },
+        {
+          q: "가족이 화났을 때?",
+          options: [
+            { text: "논리적으로 이유를 설명해요 🧠", type: "T" },
+            { text: "감정을 먼저 이해하려고 해요 ❤️", type: "F" },
+          ],
+        },
+        {
+          q: "새 가전제품 설명서를 볼 때?",
+          options: [
+            { text: "단계별로 꼼꼼히 읽어요 📖", type: "S" },
+            { text: "대충 감으로 사용해봐요 🎮", type: "N" },
+          ],
+        },
+      ];
+
+      let currentQuestion = 0;
+      let answers = [];
+
+      function startTest() {
+        document.getElementById("intro").classList.add("hidden");
+        document.getElementById("test").classList.remove("hidden");
+        showQuestion();
+      }
+
+      function showQuestion() {
+        const q = questions[currentQuestion];
+        document.getElementById("questionText").textContent = q.q;
+        document.getElementById("currentQ").textContent = currentQuestion + 1;
+
+        const progress = ((currentQuestion + 1) / questions.length) * 100;
+        document.getElementById("progress").textContent = Math.round(progress);
+        document.getElementById("progressBar").style.width = progress + "%";
+
+        const optionsDiv = document.getElementById("options");
+        optionsDiv.innerHTML = "";
+
+        q.options.forEach((option, idx) => {
+          const btn = document.createElement("button");
+          btn.className = "option-btn";
+          btn.textContent = option.text;
+          btn.onclick = () => selectAnswer(option.type);
+          optionsDiv.appendChild(btn);
+        });
+
+        if (currentQuestion > 0) {
+          document.getElementById("backBtn").classList.remove("hidden");
+        } else {
+          document.getElementById("backBtn").classList.add("hidden");
+        }
+      }
+
+      function selectAnswer(type) {
+        answers.push(type);
+
+        if (currentQuestion < questions.length - 1) {
+          currentQuestion++;
+          const card = document.querySelector("#test .card");
+          card.classList.add("fade-out");
+          setTimeout(() => {
+            card.classList.remove("fade-out");
+            showQuestion();
+          }, 300);
+        } else {
+          showResult();
+        }
+      }
+
+      function prevQuestion() {
+        if (currentQuestion > 0) {
+          currentQuestion--;
+          answers.pop();
+          showQuestion();
+        }
+      }
+
+      function calculateMBTI() {
+        const counts = { E: 0, I: 0, S: 0, N: 0, T: 0, F: 0, J: 0, P: 0 };
+        answers.forEach((answer) => {
+          counts[answer]++;
+        });
+
+        return (
+          (counts.E > counts.I ? "E" : "I") +
+          (counts.S > counts.N ? "S" : "N") +
+          (counts.T > counts.F ? "T" : "F") +
+          (counts.J > counts.P ? "J" : "P")
+        );
+      }
+
+      function showResult() {
+        document.getElementById("test").classList.add("hidden");
+        document.getElementById("result").classList.remove("hidden");
+
+        const mbti = calculateMBTI();
+        const profile = mbtiProfiles[mbti];
+
+        document.getElementById("resultEmoji").textContent = profile.emoji;
+        document.getElementById("resultBadge").textContent = mbti;
+        document.getElementById("resultBadge").style.background = profile.color;
+        document.getElementById("resultTitle").textContent = profile.title;
+        document.getElementById("resultDesc").textContent = profile.desc;
+        document.getElementById("resultStrength").textContent =
+          profile.strength;
+        document.getElementById("resultTip").textContent = profile.tip;
+      }
+
+      function restart() {
+        currentQuestion = 0;
+        answers = [];
+        document.getElementById("result").classList.add("hidden");
+        document.getElementById("intro").classList.remove("hidden");
+      }
+    </script>
+  </body>
+</html>
